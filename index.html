@@ -84,7 +84,7 @@ h3{margin:4px 0 10px;font-size:15px}
   <div id="liveBox" hidden>
     <video id="liveVideo" playsinline muted autoplay></video>
     <div class="scanline"></div>
-    <div id="liveHint">QR / バーコードを枠内にかざしてください</div>
+    <div id="liveHint">QR / バーコードを枠内にかざしてください（映らないときは黒い部分をタップ）</div>
     <div style="height:8px"></div>
     <button class="bigbtn gray" id="btnLiveStop">■ スキャン停止</button>
   </div>
@@ -316,12 +316,22 @@ let liveStream=null, liveTimer=null;
 const liveOK = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.isSecureContext);
 async function startLive(){
   try{
-    liveStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment', width:{ideal:1280}, height:{ideal:720}}, audio:false});
-  }catch(e){ toast('カメラを起動できませんでした。1枚撮影方式をご利用ください'); return; }
+    liveStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}, width:{ideal:1280}, height:{ideal:720}}, audio:false});
+  }catch(e){
+    if(e && e.name==='NotAllowedError') toast('カメラが許可されていません。Safariのぁあメニュー→Webサイトの設定→カメラを「許可」に');
+    else toast('カメラを起動できませんでした（'+(e&&e.name||'不明')+'）。1枚撮影方式をご利用ください');
+    return;
+  }
   $('btnLive').hidden = true; $('liveBox').hidden = false;
   const v = $('liveVideo');
+  v.muted = true; v.playsInline = true; v.setAttribute('playsinline','');
   v.srcObject = liveStream;
-  try{ await v.play(); }catch(e){}
+  const tryPlay = ()=>{ const p=v.play(); if(p&&p.catch) p.catch(()=>{}); };
+  v.onloadedmetadata = tryPlay;
+  v.onclick = tryPlay;            // 黒い場合は映像部分をタップで再生
+  $('liveBox').onclick = tryPlay;
+  tryPlay();
+  setTimeout(()=>{ if(liveStream && (!v.videoWidth || v.paused)){ tryPlay(); toast('映像が映らない場合は黒い部分をタップしてください'); } }, 1500);
   const canvas = document.createElement('canvas');
   const reader = new ZXing.MultiFormatReader();
   reader.setHints(zxHints(true));

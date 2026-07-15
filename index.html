@@ -11,13 +11,14 @@
 <title>楽器棚卸</title>
 <style>
 :root{
-  --bg:#f2f4f7; --panel:#fff; --ink:#1a2733; --sub:#5b6b7a;
-  --accent:#2563eb; --green:#0e9f6e; --warn:#d97706; --danger:#dc2626; --line:#dde4ea;
+  --bg:#f7ecd9; --panel:#fff8ea; --ink:#4a3728; --sub:#9b7f63;
+  --accent:#e06a1f; --green:#3f7d4e; --warn:#b5442c; --danger:#c0392b; --line:#e5d2b3;
+  --shadow:3px 3px 0 #4a3728;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
 body{font-family:"Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;padding-bottom:70px}
-header{background:#1e3a5f;color:#fff;padding:12px 16px;font-size:17px;font-weight:700;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+header{background:#4a3728;color:#f7ecd9;padding:12px 16px;font-size:17px;font-weight:700;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;border-bottom:3px solid #e06a1f}
 header small{font-weight:400;font-size:12px;opacity:.85}
 nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#fff;border-top:1px solid var(--line);z-index:10;padding-bottom:env(safe-area-inset-bottom)}
 nav button{flex:1;padding:10px 4px;border:none;background:none;font-size:13px;color:var(--sub)}
@@ -25,12 +26,13 @@ nav button.active{color:var(--accent);font-weight:700}
 nav button .ico{display:block;font-size:20px}
 section{display:none;padding:14px}
 section.show{display:block}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
-.bigbtn{display:block;width:100%;padding:18px;font-size:18px;font-weight:700;border:none;border-radius:12px;background:var(--accent);color:#fff;text-align:center}
-.bigbtn:active{opacity:.85}
+.card{background:var(--panel);border:1.5px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+.bigbtn{display:block;width:100%;padding:18px;font-size:18px;font-weight:700;border:none;border-radius:16px;background:var(--accent);color:#fff8ea;text-align:center;box-shadow:var(--shadow)}
+.bigbtn:active{opacity:.85;transform:translate(2px,2px);box-shadow:1px 1px 0 #4a3728}
 .bigbtn.green{background:var(--green)}
-.bigbtn.gray{background:#6b7a89}
-.bigbtn:disabled{background:#b9c3cc}
+.bigbtn.gray{background:#8d7361}
+.bigbtn:disabled{background:#cbb9a4;box-shadow:none}
+.notecard{background:#fff3d6;border:1.5px dashed #d9b96a;border-radius:12px;padding:9px 12px;font-size:12px;color:#7a5c33;margin-top:12px;line-height:1.6}
 button.sub{font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:#fff}
 input[type=text],textarea,select{font:inherit;width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:#fff}
 .row{display:flex;gap:8px;align-items:center}
@@ -42,12 +44,12 @@ input[type=text],textarea,select{font:inherit;width:100%;padding:10px;border:1px
 .notfound{border-left:5px solid var(--warn)}
 .rname{font-size:19px;font-weight:700;margin:2px 0 6px}
 .rmeta{color:var(--sub);font-size:13px;line-height:1.7}
-.codebox{display:inline-block;background:#eef2f6;border-radius:6px;padding:2px 10px;font-weight:700;font-family:ui-monospace,monospace}
+.codebox{display:inline-block;background:#f0e0c2;border-radius:6px;padding:2px 10px;font-weight:700;font-family:ui-monospace,monospace}
 .stgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
 .stgrid label{border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center;background:#fff}
 .stgrid input{display:none}
 .stgrid input:checked+span{font-weight:700}
-.stgrid label:has(input:checked){border-color:var(--accent);background:#e8f0fe;color:var(--accent)}
+.stgrid label:has(input:checked){border-color:var(--accent);background:#fbe3d0;color:#a34a12}
 .histitem{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 4px;border-bottom:1px solid var(--line)}
 .histitem .t1{font-weight:700}
 .histitem .t2{font-size:12px;color:var(--sub)}
@@ -59,7 +61,7 @@ input[type=text],textarea,select{font:inherit;width:100%;padding:10px;border:1px
 .pick{padding:12px;border-bottom:1px solid var(--line)}
 .pick .pn{font-weight:700}
 .pick .pm{font-size:12px;color:var(--sub)}
-#toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#1a2733;color:#fff;padding:10px 20px;border-radius:20px;font-size:14px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:50;white-space:nowrap}
+#toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#4a3728;color:#f7ecd9;padding:10px 20px;border-radius:20px;font-size:14px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:50;white-space:nowrap}
 #toast.show{opacity:.95}
 #busy{position:fixed;inset:0;background:rgba(255,255,255,.7);display:none;align-items:center;justify-content:center;font-size:18px;font-weight:700;z-index:40}
 textarea#csvText{font-family:ui-monospace,monospace;font-size:11px;height:120px}
@@ -90,6 +92,7 @@ h3{margin:4px 0 10px;font-size:15px}
   </div>
   <div style="height:10px"></div>
   <button class="bigbtn gray" id="btnShoot">📷 1枚撮影して読み取り</button>
+  <div class="notecard">📌 カメラが起動しない・真っ暗なときは、お使いのブラウザ（Chrome / Safari）の設定で<b>カメラの権限を「許可」</b>にしてください。<br>iPhone: 設定 → アプリ → Chrome（またはSafari）→ カメラ → 許可</div>
   <input type="file" id="camInput" accept="image/*" capture="environment" hidden>
   <input type="file" id="photoInput" accept="image/*" capture="environment" hidden>
   <div class="card" style="margin-top:12px">
@@ -357,12 +360,12 @@ function stopLive(){
 }
 
 /* ================= 照合と記録フォーム ================= */
-const STATUSES = ['良好','要調整','要修理','その他'];
+const STATUSES = ['棚卸のみ','良好','要修理/調整','その他'];   // 棚卸のみ=状態確認なしで在庫チェックだけ
 function statusRadios(sel){
   return '<div class="stgrid">'+STATUSES.map(s=>
-    `<label><input type="radio" name="stRadio" value="${s}" ${s===(sel||'良好')?'checked':''}><span>${s}</span></label>`).join('')+'</div>';
+    `<label><input type="radio" name="stRadio" value="${s}" ${s===(sel||'棚卸のみ')?'checked':''}><span>${s}</span></label>`).join('')+'</div>';
 }
-function pickedStatus(){ const r=document.querySelector('input[name="stRadio"]:checked'); return r?r.value:'良好'; }
+function pickedStatus(){ const r=document.querySelector('input[name="stRadio"]:checked'); return r?r.value:'棚卸のみ'; }
 function photoBlock(prevPhoto){
   return `<div class="field"><label>現況写真（任意）— 前回と見比べて変化がないか確認できます</label>
     <button class="sub" id="btnPhoto" type="button">📷 現況写真を撮る</button>
@@ -390,11 +393,11 @@ function handleCode(code){
     area.innerHTML = `<div class="card found">
       <div class="rmeta">✅ 台帳にあります　<span class="codebox">${esc(code)}</span></div>
       <div class="rname">${esc(m.name)}</div>
-      <div class="rmeta">${esc(m.maker||'')} ${esc(m.model||'')}<br>場所: ${esc(m.location||'—')} ／ 使用者: ${esc(m.user||'—')} ／ ${esc(m.ownership||'')}</div>
+      <div class="rmeta">${esc(m.maker||'')} ${esc(m.model||'')}<br>場所: ${esc(((m.facility||'')+' '+(m.location||'')).trim()||'—')} ／ 貸与: ${esc(m.user||'—')} ／ ${esc(m.ownership||'')}</div>
       ${dupNote}
       <div class="field"><label>状態</label>${statusRadios()}</div>
       ${photoBlock(m.photo)}
-      <div class="field"><label>メモ（任意）</label><textarea id="fMemo" rows="2" placeholder="キズあり、ケース破損 など"></textarea></div>
+      <div class="field"><label>備考（任意）</label><textarea id="fMemo" rows="2" placeholder="ここに備考を入力してください（例: キズあり、ケース破損）"></textarea></div>
       <button class="bigbtn green" id="btnRec">✔ 確認を記録</button>
     </div>`;
     armPhotoButton();
@@ -430,7 +433,7 @@ function showPicker(code){
     const hit = master.filter(m=>!t || (m.code+' '+m.name+' '+(m.maker||'')+' '+(m.model||'')).toLowerCase().includes(t)).slice(0,50);
     $('pickList').innerHTML = hit.map(m=>`<div class="pick" data-code="${esc(m.code)}">
       <div class="pn">${esc(m.name)}</div>
-      <div class="pm">${esc(m.code)} ｜ ${esc(m.maker||'')} ${esc(m.model||'')} ｜ ${esc(m.location||'')}</div>
+      <div class="pm">${esc(m.code)} ｜ ${esc(m.maker||'')} ${esc(m.model||'')} ｜ ${esc(((m.facility||'')+' '+(m.location||'')).trim())}</div>
     </div>`).join('') || '<div class="hint">該当なし</div>';
     [...$('pickList').children].forEach(el=>{
       if(!el.dataset.code) return;
@@ -443,7 +446,7 @@ function showPicker(code){
           <div class="rmeta">現コード: ${esc(m.code)} ｜ ${esc(m.maker||'')} ${esc(m.model||'')}</div>
           <div class="field"><label>状態</label>${statusRadios()}</div>
           ${photoBlock(m.photo)}
-          <div class="field"><label>メモ（任意）</label><textarea id="fMemo" rows="2"></textarea></div>
+          <div class="field"><label>備考（任意）</label><textarea id="fMemo" rows="2" placeholder="ここに備考を入力してください（例: キズあり、ケース破損）"></textarea></div>
           <button class="bigbtn green" id="btnRec">🔗 紐付けて確認を記録</button>
         </div>`;
         armPhotoButton();
@@ -471,7 +474,7 @@ function showNewForm(code){
     <div class="field"><label>区分</label><select id="nOwn"><option value="公物">公物</option><option value="私物">私物</option></select></div>
     <div class="field"><label>状態</label>${statusRadios()}</div>
     ${photoBlock('')}
-    <div class="field"><label>メモ（任意）</label><textarea id="nMemo" rows="2"></textarea></div>
+    <div class="field"><label>備考（任意）</label><textarea id="nMemo" rows="2" placeholder="ここに備考を入力してください（例: キズあり、ケース破損）"></textarea></div>
     <button class="bigbtn green" id="btnRec">＋ 仮新規で記録</button>
     <div class="hint">PCに取り込むと「仮登録」として台帳に追加されます（写真も一緒に登録されます）。</div>
   </div>`;
